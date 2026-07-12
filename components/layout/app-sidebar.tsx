@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { LayoutDashboard, BarChart3, Globe, CalendarDays, QrCode, Folder, CreditCard, Settings } from "lucide-react";
-
+import { Building2 } from "lucide-react";
 const items = [
   { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { title: "Analytics", href: "/analytics", icon: BarChart3 },
@@ -12,6 +12,7 @@ const items = [
   { title: "Files", href: "/files", icon: Folder },
   { title: "Membership", href: "/membership", icon: CreditCard },
   { title: "Settings", href: "/settings", icon: Settings },
+  {title: "Business",href: "/business",icon: Building2,}
 ];
 
 export function AppSidebar() {
