@@ -5,7 +5,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,11 +41,11 @@ export function SignupForm() {
     });
 
     if (error) {
-      alert(error.message);
+      toast.error(error.message);
       return;
     }
 
-    alert("Check your email to verify your account.");
+   toast.success("Account created. Check your email.");
   };
 
   return (

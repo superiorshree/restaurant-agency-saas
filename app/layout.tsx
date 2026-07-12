@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Toaster } from "sonner";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import "./globals.css";
@@ -39,9 +40,10 @@ export default function RootLayout({
       className={`${geist.variable} ${inter.variable} ${geistMono.variable}`}
     >
       <body>
-  <ThemeProvider>
-    {children}
-  </ThemeProvider>
+<ThemeProvider>
+  {children}
+  <Toaster richColors position="top-right" />
+</ThemeProvider>
 </body>
     </html>
   );

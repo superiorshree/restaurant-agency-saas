@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 
 const loginSchema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -34,11 +35,13 @@ const onSubmit = async (data: LoginFormData) => {
   });
 
   if (error) {
-    alert(error.message);
+    toast.error(error.message);
     return;
   }
 
-  alert("Login successful!");
+  toast.success("Login successful");
+
+window.location.href = "/dashboard";
 };
 
   return (
