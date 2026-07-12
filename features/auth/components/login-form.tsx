@@ -9,6 +9,7 @@ import { supabase } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const loginSchema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -19,7 +20,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
-
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -41,7 +42,8 @@ const onSubmit = async (data: LoginFormData) => {
 
   toast.success("Login successful");
 
-window.location.href = "/dashboard";
+router.push("/dashboard");
+router.refresh();
 };
 
   return (
