@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { BusinessForm } from "@/components/business/business-form";
 import { AppShell } from "@/components/layout/app-shell";
 import { BusinessCard } from "@/components/business/business-card";
-
+import { LogoUpload } from "@/components/business/logo-upload";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function BusinessPage() {
@@ -45,6 +45,7 @@ export default async function BusinessPage() {
           email={business.email}
         />
         <BusinessForm />
+        <LogoUpload />
       </div>
     </AppShell>
   );
