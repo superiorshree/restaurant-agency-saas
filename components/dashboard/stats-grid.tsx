@@ -1,52 +1,58 @@
 import {
   CalendarDays,
-  Clock,
   CreditCard,
-  BadgeCheck,
+  Globe,
+  Network,
+  ShieldCheck,
 } from "lucide-react";
 
 import { StatCard } from "./stat-card";
 
 interface StatsGridProps {
-  bookingsToday: number;
-  pendingBookings: number;
-  plan: string;
-  renewalDate: string;
+  bookingCount: number;
+  website: string;
+  domain: string;
+  sslStatus: string;
+  membership: string;
 }
 
 export function StatsGrid({
-  bookingsToday,
-  pendingBookings,
-  plan,
-  renewalDate,
+  bookingCount,
+  website,
+  domain,
+  sslStatus,
+  membership,
 }: StatsGridProps) {
   return (
-    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
       <StatCard
-        title="Today's Bookings"
-        value={String(bookingsToday)}
-        icon={<CalendarDays size={20} />}
+        title="Website"
+        value={website}
+        icon={<Globe size={20} />}
         change=""
       />
-
       <StatCard
-        title="Pending Bookings"
-        value={String(pendingBookings)}
-        icon={<Clock size={20} />}
+        title="Domain"
+        value={domain}
+        icon={<Network size={20} />}
         change=""
       />
-
       <StatCard
-        title="Current Plan"
-        value={plan}
+        title="SSL"
+        value={sslStatus}
+        icon={<ShieldCheck size={20} />}
+        change=""
+      />
+      <StatCard
+        title="Membership"
+        value={membership}
         icon={<CreditCard size={20} />}
         change=""
       />
-
       <StatCard
-        title="Renewal Date"
-        value={renewalDate}
-        icon={<BadgeCheck size={20} />}
+        title="Today's bookings"
+        value={String(bookingCount)}
+        icon={<CalendarDays size={20} />}
         change=""
       />
     </div>

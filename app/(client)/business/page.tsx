@@ -3,9 +3,11 @@ import { BusinessForm } from "@/components/business/business-form";
 import { AppShell } from "@/components/layout/app-shell";
 import { BusinessCard } from "@/components/business/business-card";
 import { LogoUpload } from "@/components/business/logo-upload";
+import { InfrastructureOverview } from "@/components/business/infrastructure-overview";
 import { createClient } from "@/lib/supabase/server";
  import { getCurrentBusiness } from "@/lib/services/business.service";
  import { getBusinessTypes } from "@/lib/services/business-type.service";
+ import { getInfrastructureOverview } from "@/lib/services/infrastructure.service";
 
 export default async function BusinessPage() {
   const supabase = await createClient();
@@ -31,6 +33,12 @@ if (!business) {
     );
   }
 
+const infrastructure = await getInfrastructureOverview(
+  business.id,
+  business.business_type_id,
+  businessTypes
+);
+
   return (
     <AppShell>
       <div className="space-y-8">
@@ -44,6 +52,7 @@ if (!business) {
   email={business.email}
   logo={business.logo}
 />
+        <InfrastructureOverview overview={infrastructure} />
         <BusinessForm
   businessTypes={businessTypes}
   business={business}

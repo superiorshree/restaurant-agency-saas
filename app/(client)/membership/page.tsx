@@ -1,46 +1,9 @@
-import { redirect } from "next/navigation";
-import { MembershipCard } from "@/components/membership/membership-card";
+import Link from "next/link";
 import { AppShell } from "@/components/layout/app-shell";
-import { createClient } from "@/lib/supabase/server";
-import { RenewButton } from "@/components/membership/renew-button";
-import { ExpiryBanner } from "@/components/membership/expiry-banner";
-import {
-  getCurrentBusiness,} from "@/lib/services/business.service";
-import { getMembership,} from "@/lib/services/membership.service";
-export default async function MembershipPage() {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) redirect("/login");
-
-const business = await getCurrentBusiness(user.id);
-
-const membership = await getMembership(business.id);
-if (!business) {
-  return (
-    <AppShell>
-      <h1 className="text-2xl font-bold">
-        Business not found
-      </h1>
-    </AppShell>
-  );
-}
-  return (
-    <AppShell>
-        <ExpiryBanner
-  renewalDate={membership.renewal_date}
-/>
-      <MembershipCard
-  plan={membership.plan}
-  status={membership.status}
-  renewal={membership.renewal_date}
-  payment={membership.payment_status}
-  price={membership.price}
-/>
-<RenewButton />
-    </AppShell>
-  );
-}
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { SubscriptionPlans } from "@/components/membership/subscription-plans";
+import { requireBusiness } from "@/lib/services/auth.service";
+import { getBillingOverview, getPlans } from "@/lib/services/billing.service";
+export default async function MembershipPage() { const { business } = await requireBusiness(); const [{ subscription, invoices, daysRemaining }, plans] = await Promise.all([getBillingOverview(business.id), getPlans()]); return <AppShell><div className="space-y-8"><div><h1 className="text-3xl font-bold">Membership & billing</h1><p className="mt-1 text-muted-foreground">Manage your plan, renewals, and invoices.</p></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"><Metric title="Current plan" value={subscription?.plan?.name ?? "Not configured"} /><Metric title="Renewal" value={subscription?.renewal_date ?? "—"} /><Metric title="Remaining days" value={daysRemaining === null ? "—" : String(daysRemaining)} /><Metric title="Next payment" value={subscription?.plan ? `₹${subscription.billing_cycle === "yearly" ? subscription.plan.yearly_price : subscription.plan.monthly_price}` : "—"} /></div><Card><CardHeader><CardTitle>Invoice history</CardTitle><CardDescription>Download invoices and track payment status.</CardDescription></CardHeader><CardContent>{invoices.length ? <div className="overflow-x-auto"><table className="w-full min-w-[680px] text-sm"><thead className="border-b text-left"><tr><th className="p-3">Invoice</th><th className="p-3">Plan</th><th className="p-3">Amount</th><th className="p-3">Due date</th><th className="p-3">Status</th><th className="p-3"></th></tr></thead><tbody>{invoices.map((invoice) => <tr className="border-b" key={invoice.id}><td className="p-3">{invoice.invoice_number}</td><td className="p-3">{invoice.plan_name}</td><td className="p-3">₹{invoice.amount}</td><td className="p-3">{invoice.due_date}</td><td className="p-3">{invoice.status}</td><td className="p-3"><Button asChild variant="outline" size="sm"><Link href={`/api/invoices/${invoice.id}/pdf`}>PDF</Link></Button></td></tr>)}</tbody></table></div> : <p className="text-sm text-muted-foreground">No invoices yet.</p>}</CardContent></Card><section><h2 className="mb-4 text-xl font-semibold">Plans</h2><SubscriptionPlans plans={plans} /></section></div></AppShell>; }
+function Metric({ title, value }: { title: string; value: string }) { return <Card size="sm"><CardHeader><CardDescription>{title}</CardDescription><CardTitle>{value}</CardTitle></CardHeader></Card>; }
