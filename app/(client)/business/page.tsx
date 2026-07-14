@@ -4,6 +4,8 @@ import { AppShell } from "@/components/layout/app-shell";
 import { BusinessCard } from "@/components/business/business-card";
 import { LogoUpload } from "@/components/business/logo-upload";
 import { createClient } from "@/lib/supabase/server";
+ import { getCurrentBusiness } from "@/lib/services/business.service";
+ import { getBusinessTypes } from "@/lib/services/business-type.service";
 
 export default async function BusinessPage() {
   const supabase = await createClient();
@@ -16,13 +18,10 @@ export default async function BusinessPage() {
     redirect("/login");
   }
 
-  const { data: business, error } = await supabase
-    .from("businesses")
-    .select("*")
-    .eq("owner_id", user.id)
-    .single();
+const business = await getCurrentBusiness(user.id);
+const businessTypes = await getBusinessTypes();
 
-  if (error || !business) {
+if (!business) {
     return (
       <AppShell>
         <h1 className="text-2xl font-bold">
@@ -39,12 +38,16 @@ export default async function BusinessPage() {
           Business Profile
         </h1>
 
-        <BusinessCard
-          name={business.name}
-          owner={business.owner}
-          email={business.email}
-        />
-        <BusinessForm />
+       <BusinessCard
+  name={business.name}
+  owner={business.owner}
+  email={business.email}
+  logo={business.logo}
+/>
+        <BusinessForm
+  businessTypes={businessTypes}
+  business={business}
+/>
         <LogoUpload />
       </div>
     </AppShell>

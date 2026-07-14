@@ -24,7 +24,23 @@ const supabase = createClient();
       return;
     }
 
-    alert("Logo uploaded");
+    const {
+  data: { publicUrl },
+} = supabase.storage
+  .from("business-assets")
+  .getPublicUrl(fileName);
+
+await fetch("/api/business", {
+  method: "PATCH",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    logo: publicUrl,
+  }),
+});
+
+alert("Logo uploaded");
   }
 
   return (

@@ -1,41 +1,53 @@
 import {
-  Users,
-  QrCode,
-  Phone,
-  IndianRupee,
+  CalendarDays,
+  Clock,
+  CreditCard,
+  BadgeCheck,
 } from "lucide-react";
 
 import { StatCard } from "./stat-card";
 
-export function StatsGrid() {
+interface StatsGridProps {
+  bookingsToday: number;
+  pendingBookings: number;
+  plan: string;
+  renewalDate: string;
+}
+
+export function StatsGrid({
+  bookingsToday,
+  pendingBookings,
+  plan,
+  renewalDate,
+}: StatsGridProps) {
   return (
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
       <StatCard
-        title="Visitors"
-        value="1,245"
-        icon={<Users size={20} />}
-        change="+12%"
+        title="Today's Bookings"
+        value={String(bookingsToday)}
+        icon={<CalendarDays size={20} />}
+        change=""
       />
 
       <StatCard
-        title="QR Scans"
-        value="543"
-        icon={<QrCode size={20} />}
-        change="+8%"
+        title="Pending Bookings"
+        value={String(pendingBookings)}
+        icon={<Clock size={20} />}
+        change=""
       />
 
       <StatCard
-        title="Calls"
-        value="89"
-        icon={<Phone size={20} />}
-        change="+5%"
+        title="Current Plan"
+        value={plan}
+        icon={<CreditCard size={20} />}
+        change=""
       />
 
       <StatCard
-        title="Revenue"
-        value="₹12,500"
-        icon={<IndianRupee size={20} />}
-        change="+18%"
+        title="Renewal Date"
+        value={renewalDate}
+        icon={<BadgeCheck size={20} />}
+        change=""
       />
     </div>
   );
